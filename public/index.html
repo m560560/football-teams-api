@@ -33,7 +33,7 @@
       const name = document.getElementById('name').value;
       const rating = parseInt(document.getElementById('rating').value);
       try {
-        const res = await fetch('http://localhost:3000/players', {
+        const res = await fetch('https://football-teams-api.onrender.com/players', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ name, rating })
@@ -50,7 +50,7 @@
       e.preventDefault();
       const playersPerTeam = parseInt(document.getElementById('playersPerTeam').value);
       try {
-        const res = await fetch('http://localhost:3000/teams', {
+        const res = await fetch('https://football-teams-api.onrender.com/teams', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ playersPerTeam })
@@ -70,7 +70,7 @@
 
     async function resetPlayers() {
       try {
-        const res = await fetch('http://localhost:3000/players', { method: 'DELETE' });
+        const res = await fetch('https://football-teams-api.onrender.com/players', { method: 'DELETE' });
         const data = await res.json();
         alert(data.message);
         teamsDiv.innerHTML = '';
