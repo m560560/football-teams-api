@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="he">
+<head>
+  <meta charset="UTF-8">
+  <title>חלוקת קבוצות כדורגל</title>
+  <style>
+    body { font-family: Arial, sans-serif; text-align: center; }
+    form { margin: 20px; }
+    input, button { padding: 10px; margin: 5px; }
+    #teams { margin-top: 20px; }
+  </style>
+</head>
+<body>
+  <h1>חלוקת קבוצות כדורגל</h1>
+  <form id="playerForm">
+    <input type="text" id="name" placeholder="שם שחקן" required>
+    <input type="number" id="rating" placeholder="דירוג (1-10)" min="1" max="10" required>
+    <button type="submit">הוסף שחקן</button>
+  </form>
+  <form id="teamForm">
+    <input type="number" id="playersPerTeam" placeholder="שחקנים לקבוצה" min="1" required>
+    <button type="submit">חלק לקבוצות</button>
+  </form>
+  <button onclick="resetPlayers()">אפס שחקנים</button>
+  <div id="teams"></div>
+  <script>
+    const playerForm = document.getElementById('playerForm');
+    const teamForm = document.getElementById('teamForm');
+    const teamsDiv = document.getElementById('teams');
+
+    playerForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const name = document.getElementById('name').value;
+      const rating = parseInt(document.getElementById('rating').value);
+      try {
+        const res = await fetch('http://localhost:3000/players', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ name, rating })
+        });
+        const data = await res.json();
+        alert(data.message);
+        playerForm.reset();
+      } catch (err) {
+        alert('שגיאה: ' + err.message);
+      }
+    });
+
+    teamForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const playersPerTeam = parseInt(document.getElementById('playersPerTeam').value);
+      try {
+        const res = await fetch('http://localhost:3000/teams', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ playersPerTeam })
+        });
+        const data = await res.json();
+        teamsDiv.innerHTML = '<h2>קבוצות:</h2>' + data.teams.map(team => `
+          <div>
+            <h3>קבוצה ${team.teamNumber}</h3>
+            <p>דירוג כולל: ${team.totalRating}</p>
+            <ul>${team.players.map(p => `<li>${p.name} (דירוג: ${p.rating})</li>`).join('')}</ul>
+          </div>
+        `).join('');
+      } catch (err) {
+        alert('שגיאה: ' + err.message);
+      }
+    });
+
+    async function resetPlayers() {
+      try {
+        const res = await fetch('http://localhost:3000/players', { method: 'DELETE' });
+        const data = await res.json();
+        alert(data.message);
+        teamsDiv.innerHTML = '';
+      } catch (err) {
+        alert('שגיאה: ' + err.message);
+      }
+    }
+  </script>
+</body>
+</html>
