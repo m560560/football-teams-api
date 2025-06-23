@@ -1,17 +1,26 @@
 {
   "name": "football-teams-api",
   "version": "1.0.0",
+  "description": "אפליקציית Node.js לחלוקת שחקני כדורגל לקבוצות מאוזנות",
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jest"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "description": "",
+  "keywords": [
+    "football",
+    "teams",
+    "api",
+    "node.js"
+  ],
+  "author": "שם המפתח",
+  "license": "MIT",
   "dependencies": {
-    "express": "^5.1.0",
-    "mongoose": "^8.16.0"
+    "express": "^4.18.2",
+    "mongoose": "^8.0.0"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0",
+    "supertest": "^6.3.3"
   }
 }
